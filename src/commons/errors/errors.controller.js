@@ -31,6 +31,12 @@ const handleCastError23505 = () =>
 const handleCastError22P02 = () =>
   new AppError('Invalid data type in database', 400);
 
+const handleJWTExpiredError = () =>
+  new AppError('Your token has expired! Please login again', 401);
+
+const handleJWTError = () =>
+  new AppError('Invalid Token. Please login again', 401);
+
 export const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'fail';
@@ -43,9 +49,11 @@ export const globalErrorHandler = (err, req, res, next) => {
     let error = err;
 
     if (err.parent?.code === '23505') error = handleCastError23505();
-
     if (err.parent?.code === '22P02') error = handleCastError22P02();
+    if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
+    if (err.name === 'JsonWebTokenError') error = handleJWTError();
 
-    sendErrorProd(error, res);
+    if (err.name === "TokenExpiredError")
+      sendErrorProd(error, res);
   }
 };
