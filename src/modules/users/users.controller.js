@@ -15,18 +15,12 @@ export const signUp = catchAsync(async (req, res, next) => {
     });
   }
 
-  const user = await UserServices.create(userData);
+  const user = await UserServices.create(userData)
 
-  const token = await generateJWT(user.id);
+  const token =  await generateJWT(user.id)
 
   return res.status(201).json({
-    token,
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
+    token
   });
 });
 

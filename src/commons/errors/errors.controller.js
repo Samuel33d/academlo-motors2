@@ -1,5 +1,6 @@
 import { AppError } from './appError.js';
 import { envs } from '../../config/enviroments/enviroments.js';
+import { Error } from './errors.model.js';
 
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -10,7 +11,13 @@ const sendErrorDev = (err, res) => {
   });
 };
 
-const sendErrorProd = (err, res) => {
+const sendErrorProd = async (err, res) => {
+  await Error.create({
+    status: err.status,
+    message: err.message,
+    stack: err.stack
+  })
+
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
@@ -41,6 +48,7 @@ export const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'fail';
 
+
   if (envs.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   }
@@ -53,7 +61,7 @@ export const globalErrorHandler = (err, req, res, next) => {
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
     if (err.name === 'JsonWebTokenError') error = handleJWTError();
 
-    if (err.name === "TokenExpiredError")
+    
       sendErrorProd(error, res);
   }
 };
