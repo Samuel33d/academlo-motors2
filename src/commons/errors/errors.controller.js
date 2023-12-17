@@ -68,7 +68,9 @@ export const globalErrorHandler = (err, req, res, next) => {
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
     if (err.name === 'JsonWebTokenError') error = handleJWTError();
     if (err.parent?.code === '23503') error = handleCastError23503();
-    if(err?.code === "LIMIT_UNEXPECTED_FILE") error = handleLimitFileError()
+    if (err?.code === "LIMIT_UNEXPECTED_FILE") error = handleLimitFileError()
+
+
     sendErrorProd(error, res);
   }
 };
