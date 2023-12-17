@@ -5,6 +5,7 @@ import { AppError } from './commons/errors/appError.js';
 import { globalErrorHandler } from './commons/errors/errors.controller.js';
 import { envs } from './config/enviroments/enviroments.js';
 import { enableCors } from './config/plugins/cors.plugin.js';
+import { limitRequest } from './config/plugins/rate-limit.plugin.js';
 
 const app = express();
 
@@ -16,10 +17,13 @@ if (envs.NODE_ENV === 'development') {
 }
 
 const acceptedOrigins = [];
-
 enableCors(app, acceptedOrigins);
 
+const rateLimit = limitRequest(1000, 60, 'Too many request from this IP. Please try again in an hour');
+app.use(rateLimit);
+
 app.use('/api/v1', router);
+
 app.use('*', (req, res, next) => {
   return next(
     new AppError(`Can't find ${req.originalUrl} in this server!`, 404)
