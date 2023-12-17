@@ -19,7 +19,7 @@ if (envs.NODE_ENV === 'development') {
 const acceptedOrigins = [];
 enableCors(app, acceptedOrigins);
 
-const rateLimit = limitRequest(1000, 60, 'Too many request from this IP. Please try again in an hour');
+const rateLimit = limitRequest(3, 60, 'Too many request from this IP. Please try again in an hour');
 app.use(rateLimit);
 
 app.use('/api/v1', router);
