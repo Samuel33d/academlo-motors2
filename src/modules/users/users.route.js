@@ -12,10 +12,12 @@ import {
   protectAccountOwner,
   validateExistUser,
 } from './users.middleware.js';
+import { uploadSingle } from '../../config/plugins/upload.file.plugin.js';
+
 
 export const router = express.Router();
 
-router.post('/signup', signUp);
+router.post('/signup', uploadSingle('photo'), signUp);
 router.post('/login', login);
 
 router.use(protect);

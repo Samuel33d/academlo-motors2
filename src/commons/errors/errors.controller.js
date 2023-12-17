@@ -44,6 +44,13 @@ const handleJWTExpiredError = () =>
 const handleJWTError = () =>
   new AppError('Invalid Token. Please login again', 401);
 
+const handleCastError23503 = () =>
+  new AppError('Invalid Value in Database', 401);
+
+const handleLimitFileError = () =>
+  new AppError('You can only upload up to 3 images. Please make sure you are not exceeding the allowed limit', 401)
+
+
 export const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'fail';
@@ -60,8 +67,8 @@ export const globalErrorHandler = (err, req, res, next) => {
     if (err.parent?.code === '22P02') error = handleCastError22P02();
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError();
     if (err.name === 'JsonWebTokenError') error = handleJWTError();
-
-    
-      sendErrorProd(error, res);
+    if (err.parent?.code === '23503') error = handleCastError23503();
+    if(err?.code === "LIMIT_UNEXPECTED_FILE") error = handleLimitFileError()
+    sendErrorProd(error, res);
   }
 };

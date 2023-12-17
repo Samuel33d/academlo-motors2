@@ -1,6 +1,8 @@
 import { AppError } from '../../commons/errors/appError.js';
 import { catchAsync } from '../../commons/errors/catchAsync.js';
+import { uploadFile } from '../../commons/utils/upload-file-cloud.js';
 import { verifyPassword } from '../../config/plugins/encripted-password.plugin.js';
+import { generateUUID } from '../../config/plugins/generate-uuid.plugin.js';
 import generateJWT from '../../config/plugins/generateJWT.js';
 import { validateLogin, validateUpdate, validateUser } from './users.schema.js';
 import { UserServices } from './users.service.js';
@@ -15,12 +17,23 @@ export const signUp = catchAsync(async (req, res, next) => {
     });
   }
 
+  const path = `user/${generateUUID()}-${req.file.originalname}`
+  const photoUrl = await uploadFile.uploadToFireBase(path, req.file.buffer)
+
+  userData.photo = photoUrl
+
   const user = await UserServices.create(userData)
 
-  const token =  await generateJWT(user.id)
+  const token = await generateJWT(user.id)
 
   return res.status(201).json({
-    token
+    token,
+    user: {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      photo: user.photo
+    }
   });
 });
 
@@ -52,12 +65,7 @@ export const login = catchAsync(async (req, res, next) => {
 
   return res.status(200).json({
     token,
-    user: {
-      id: user.id,
-      name: user.name,
-      emal: user.email,
-      role: user.role,
-    },
+    message: 'Login succesfully'
   });
 });
 
@@ -65,7 +73,7 @@ export const findAllUsers = catchAsync(async (req, res, next) => {
   const users = await UserServices.findAll();
 
   res.status(200).json({
-    data: users,
+    users,
   });
 });
 
@@ -73,12 +81,7 @@ export const findOneUser = catchAsync(async (req, res, next) => {
   const { user } = req;
 
   res.status(200).json({
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
+  user
   });
 });
 

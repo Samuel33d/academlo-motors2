@@ -20,13 +20,18 @@ const Repair = sequelize.define('repairs', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  status: {
-    type: DataTypes.ENUM('pending', 'completed', 'cancelled'),
-    defaultValue: 'pending',
-  },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'user_id'
+  },
+  photo: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  status: {
+    type: DataTypes.ENUM('pending', 'completed', 'cancelled'),
+    defaultValue: 'pending',
   },
 });
 

@@ -1,4 +1,6 @@
 import express from 'express';
+import { uploadSingle } from '../../config/plugins/upload.file.plugin.js';
+import { protect } from '../users/users.middleware.js';
 import {
   createRepair,
   deleteRepair,
@@ -7,13 +9,12 @@ import {
   updateRepair,
 } from './repairs.controller.js';
 import { restrictTo, validateExistRepair } from './repairs.middleware.js';
-import { protect } from '../users/users.middleware.js';
 
 export const router = express.Router();
 
 router.use(protect);
 
-router.post('/', createRepair);
+router.post('/', uploadSingle('photo'), createRepair);
 
 router.use(restrictTo('employee'));
 router.get('/', findAll);

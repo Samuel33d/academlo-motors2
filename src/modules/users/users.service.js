@@ -10,6 +10,7 @@ export class UserServices {
       where: {
         status: 'available',
       },
+      attributes: ['name', 'email', 'role', 'photo', 'id'],
     });
   }
 
@@ -19,6 +20,7 @@ export class UserServices {
         id,
         status: 'available',
       },
+      attributes: ['name', 'email', 'role', 'photo', 'id'],
     });
   }
 

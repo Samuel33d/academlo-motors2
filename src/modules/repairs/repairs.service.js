@@ -1,3 +1,4 @@
+import User from '../users/users.model.js';
 import Repair from './repairs.model.js';
 
 export class RepairsServices {
@@ -7,28 +8,42 @@ export class RepairsServices {
   static async findAll() {
     return await Repair.findAll({
       where: {
-        status: 'pending',
+        status: ['pending', 'completed'],
       },
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'userId', 'user_id']
+      },
+      include: [{
+        model: User,
+        attributes: ['name', 'email']
+      }]
     });
   }
   static async findOne(id) {
     return await Repair.findOne({
       where: {
         id,
-        status: 'pending',
+        status: ['pending', 'completed'],
       },
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'userId', 'user_id']
+      },
+      include: [{
+        model: User,
+        attributes: ['name', 'email']
+      }]
     });
   }
 
   static async update(repair) {
     return await repair.update({
-      status: 'completed',
-    });
+      status: 'completed'
+    })
   }
 
   static async delete(repair) {
-    return await repair.delete({
-      status: 'cancelled',
-    });
+    return await repair.update({
+      status: 'cancelled'
+    })
   }
 }

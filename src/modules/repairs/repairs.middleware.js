@@ -7,11 +7,13 @@ export const validateExistRepair = catchAsync(async (req, res, next) => {
 
   const repair = await RepairsServices.findOne(id);
 
+  
+
   if (!repair) {
     return next(new AppError(`repair with id ${id} not found`, 404));
   }
 
-  req.repair = repair;
+  req.repair = repair
   next();
 });
 
