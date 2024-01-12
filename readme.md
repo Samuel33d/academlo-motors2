@@ -11,6 +11,8 @@ Academlo Motors es un sistema integral para facilitar el agendamiento de citas d
 
 * PostgreSQL: Se eligió como sistema de gestión de base de datos relacional para almacenar datos de manera estructurada y eficiente.
 
+* Firebase: Utilizado para el almacenamiento eficiente y escalable de archivos, como imágenes relacionadas con los vehículos.
+
 
 ## Funcionalidades Principales
 
@@ -26,6 +28,7 @@ Academlo Motors es un sistema integral para facilitar el agendamiento de citas d
 
 * Validación de Entrada con Zod: Implementa Zod para validar la entrada de datos y asegurar la consistencia y validez de los datos proporcionados por los usuarios.
 
+* Límite de Solicitudes (Request Limit): Implementa un sistema de límite de solicitudes para proteger el backend contra posibles ataques de denegación de servicio (DoS) o abuso. Este mecanismo ayuda a garantizar la disponibilidad y la eficiencia del sistema al controlar el número de solicitudes que un usuario puede hacer en un período específico.
 
 ## Pasos para ejecutar este backend
 
